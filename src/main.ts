@@ -32,9 +32,9 @@ app
 
   // middleware
   .use(cors())
-  .use(logger())
-  //.use('/surah/*', cacheMiddleware)
-  //.use('/juz/*', cacheMiddleware)
+  //.use(logger())
+  .use('/surah/*', cacheMiddleware)
+  .use('/juz/*', cacheMiddleware)
 
   // main routes
   .get('/', (c) => {
