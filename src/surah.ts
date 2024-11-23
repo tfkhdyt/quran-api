@@ -30,7 +30,10 @@ app.get('/', (c) => {
 
 // get a surah
 app.get('/:id', async (c) => {
-  const id = Number(c.req.param('id'));
+  const id = parseInt(c.req.param('id'));
+  if (isNaN(id)) {
+    throw new HTTPException(404, { message: 'Surah should be in integer' });
+  }
 
   const data = quranData.at(id - 1);
   if (!data) {
@@ -49,16 +52,25 @@ app.get('/:id', async (c) => {
 
 // get ayah from surah
 app.get('/:surahId/:ayahId', async (c) => {
-  const { surahId, ayahId } = c.req.param();
+  const surahId = parseInt(c.req.param('surahId'));
+  const ayahId = parseInt(c.req.param('ayahId'));
 
-  const surah = quranData.at(Number(surahId) - 1);
+  if (isNaN(surahId)) {
+    throw new HTTPException(400, { message: 'Surah should be in integer' });
+  }
+
+  if (isNaN(ayahId)) {
+    throw new HTTPException(400, { message: 'Ayah should be in integer' });
+  }
+
+  const surah = quranData.at(surahId - 1);
   if (!surah) {
     throw new HTTPException(404, {
       message: `Surah "${surahId}" is not found`,
     });
   }
 
-  const ayah = surah.verses?.at(Number(ayahId) - 1);
+  const ayah = surah.verses?.at(ayahId - 1);
   if (!ayah) {
     throw new HTTPException(404, {
       message: `Ayah "${ayahId}" in surah "${surahId}" is not found`,

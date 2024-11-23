@@ -13,9 +13,12 @@ const { data: juz } = juzJson as Juz;
 const app = new Hono();
 
 app.get('/:juz', async (c) => {
-  const juz = c.req.param('juz');
+  const juz = parseInt(c.req.param('juz'));
+  if (isNaN(juz)) {
+    throw new HTTPException(400, { message: 'Juz should be in integer' });
+  }
 
-  const data = juzData(Number(juz));
+  const data = juzData(juz);
   if (!data) {
     throw new HTTPException(404, { message: `Juz "${juz}" is not found` });
   }
