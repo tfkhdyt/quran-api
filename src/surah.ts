@@ -34,10 +34,13 @@ app.get('/:id', cacheMiddleware, async (c) => {
 
   const data = quranData.at(id - 1);
   if (!data) {
-    return c.json({
-      success: false,
-      message: `Surah "${id}" is not found`,
-    });
+    return c.json(
+      {
+        success: false,
+        message: `Surah "${id}" is not found`,
+      },
+      404,
+    );
   }
 
   const response = {
@@ -45,6 +48,48 @@ app.get('/:id', cacheMiddleware, async (c) => {
     message: 'Success fetching surah',
     data,
   };
+  cache.set(c.req.path, response);
+
+  return c.json(response);
+});
+
+// get ayah from surah
+app.get('/:surahId/:ayahId', cacheMiddleware, async (c) => {
+  const { surahId, ayahId } = c.req.param();
+
+  const surah = quranData.at(Number(surahId) - 1);
+  if (!surah) {
+    return c.json(
+      {
+        success: false,
+        message: `Surah "${surahId}" is not found`,
+      },
+      404,
+    );
+  }
+
+  const ayah = surah.verses?.at(Number(ayahId) - 1);
+  if (!ayah) {
+    return c.json(
+      {
+        success: false,
+        message: `Ayah "${ayahId}" in surah "${surahId}" is not found`,
+      },
+      404,
+    );
+  }
+
+  const dataSurah = { ...surah };
+  delete dataSurah.verses;
+
+  const data = { ...ayah, surah: dataSurah };
+
+  const response = {
+    success: true,
+    message: 'Success fetching ayah',
+    data,
+  };
+
   cache.set(c.req.path, response);
 
   return c.json(response);

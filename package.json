@@ -1,7 +1,7 @@
 {
 	"name": "quran-api",
 	"scripts": {
-		"dev": "bun -b run --watch src/index.ts",
+		"dev": "bun -b run --watch src/main.ts",
 		"lint": "eslint --fix src",
 		"check": "bunx tsc --noEmit",
 		"format": "prettier -cw src"
