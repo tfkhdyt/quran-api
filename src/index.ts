@@ -1,5 +1,5 @@
 import { Hono } from 'hono';
-import surahController from './surah';
+import surahController from './surah.js';
 
 const app = new Hono();
 

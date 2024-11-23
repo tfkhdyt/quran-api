@@ -9,8 +9,8 @@ const app = new Hono();
 app.get('/', (c) => {
   const data = quranData.data.map((item) => {
     const surah = { ...item };
-    surah.verses = undefined;
-    surah.preBismillah = undefined;
+    delete surah.verses;
+    delete surah.preBismillah;
 
     return surah;
   });

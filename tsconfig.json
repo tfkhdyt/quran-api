@@ -3,8 +3,10 @@
 		"strict": true,
 		"jsx": "react-jsx",
 		"jsxImportSource": "hono/jsx",
-		"module": "esnext",
+		"module": "nodenext",
 		"resolveJsonModule": true,
-		"esModuleInterop": true
+		"esModuleInterop": true,
+		"moduleResolution": "nodenext",
+		"skipLibCheck": true
 	}
 }
