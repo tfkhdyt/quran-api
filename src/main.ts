@@ -54,7 +54,7 @@ app
           example: '/juz/30',
         },
       },
-      maintaner: 'Taufik Hidayat <me@tfkhdyt.my.id>',
+      maintainer: 'Taufik Hidayat <me@tfkhdyt.my.id>',
       source: 'https://github.com/tfkhdyt/quran-api',
     };
 
