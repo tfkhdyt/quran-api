@@ -3,7 +3,8 @@
 	"scripts": {
 		"dev": "bun -b run --watch src/index.ts",
 		"lint": "eslint --fix src",
-		"check": "bunx tsc --noEmit"
+		"check": "bunx tsc --noEmit",
+		"format": "prettier -cw src"
 	},
 	"dependencies": {
 		"hono": "^4.6.11",
