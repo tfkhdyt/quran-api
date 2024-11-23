@@ -3,7 +3,6 @@ import surahController from './surah.js';
 import juzController from './juz.js';
 import { HTTPException } from 'hono/http-exception';
 import { cors } from 'hono/cors';
-import { logger } from 'hono/logger';
 import { cacheMiddleware } from './cache/middleware.js';
 
 const app = new Hono();
@@ -32,6 +31,14 @@ app
 
   // middleware
   .use(cors())
+  .use(async (c, next) => {
+    c.header(
+      'Cache-Control',
+      'public, max-age=86400, s-maxage=31536000, immutable, stale-while-revalidate=86400',
+    );
+
+    await next();
+  })
   //.use(logger())
   .use('/surah/*', cacheMiddleware)
   .use('/juz/*', cacheMiddleware)
