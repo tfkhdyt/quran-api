@@ -6,7 +6,8 @@
 		"check": "bunx tsc --noEmit"
 	},
 	"dependencies": {
-		"hono": "^4.6.11"
+		"hono": "^4.6.11",
+		"lru-cache": "^11.0.2"
 	},
 	"devDependencies": {
 		"@eslint/js": "^9.15.0",
