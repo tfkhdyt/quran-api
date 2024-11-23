@@ -35,7 +35,7 @@ type DataTafsir = {
   id: string;
 };
 
-type Verse = {
+export type Verse = {
   number: Number;
   meta: Meta;
   text: Text;
