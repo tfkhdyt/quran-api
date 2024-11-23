@@ -2,14 +2,14 @@ import { Hono } from 'hono';
 import type { Quran } from './types/quran.ts';
 import quranJson from '../data/quran.json' assert { type: 'json' };
 import { cache } from './cache/lru.js';
-import { cacheMiddleware } from './cache/middleware.js';
+import { HTTPException } from 'hono/http-exception';
 
 const { data: quranData } = quranJson as Quran;
 
 const app = new Hono();
 
 // get all surah
-app.get('/', cacheMiddleware, (c) => {
+app.get('/', (c) => {
   const data = quranData.map((item) => {
     const surah = { ...item };
     delete surah.verses;
@@ -29,18 +29,12 @@ app.get('/', cacheMiddleware, (c) => {
 });
 
 // get a surah
-app.get('/:id', cacheMiddleware, async (c) => {
+app.get('/:id', async (c) => {
   const id = Number(c.req.param('id'));
 
   const data = quranData.at(id - 1);
   if (!data) {
-    return c.json(
-      {
-        success: false,
-        message: `Surah "${id}" is not found`,
-      },
-      404,
-    );
+    throw new HTTPException(404, { message: `Surah "${id}" is not found` });
   }
 
   const response = {
@@ -54,29 +48,21 @@ app.get('/:id', cacheMiddleware, async (c) => {
 });
 
 // get ayah from surah
-app.get('/:surahId/:ayahId', cacheMiddleware, async (c) => {
+app.get('/:surahId/:ayahId', async (c) => {
   const { surahId, ayahId } = c.req.param();
 
   const surah = quranData.at(Number(surahId) - 1);
   if (!surah) {
-    return c.json(
-      {
-        success: false,
-        message: `Surah "${surahId}" is not found`,
-      },
-      404,
-    );
+    throw new HTTPException(404, {
+      message: `Surah "${surahId}" is not found`,
+    });
   }
 
   const ayah = surah.verses?.at(Number(ayahId) - 1);
   if (!ayah) {
-    return c.json(
-      {
-        success: false,
-        message: `Ayah "${ayahId}" in surah "${surahId}" is not found`,
-      },
-      404,
-    );
+    throw new HTTPException(404, {
+      message: `Ayah "${ayahId}" in surah "${surahId}" is not found`,
+    });
   }
 
   const dataSurah = { ...surah };
